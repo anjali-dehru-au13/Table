@@ -63,9 +63,6 @@ const TableData = () => {
   setSavedData(newRows);
   setShowModal(false);
  };
-
- console.log(savedData);
- // const rows = [{ id: 1, colum1: "title", col2: "Name" }];
  const columns = [
   { field: "id", headerName: "SLNO", width: 100 },
 
@@ -110,19 +107,25 @@ const TableData = () => {
  return (
   <React.Fragment>
    <div style={{ width: "80vw", textAlign: "center" }}>
-    <DataGrid
-     rows={savedData}
-     columns={columns}
-     sx={{
-      m: 6,
-      boxShadow: 2,
-      border: 2,
-      borderColor: "primary.light",
-      "& .MuiDataGrid-cell:hover": {
-       color: "primary.main",
-      },
-     }}
-    />
+    {savedData ? (
+     <DataGrid
+      autoHeight
+      rows={savedData}
+      columns={columns}
+      sx={{
+       m: 6,
+       boxShadow: 2,
+       border: 2,
+       borderColor: "primary.light",
+       "& .MuiDataGrid-cell:hover": {
+        color: "primary.main",
+       },
+      }}
+      disableColumnMenu
+     />
+    ) : (
+     "Data fetch failed"
+    )}
    </div>
    <Dialog open={showModal} onClose={() => setShowModal(false)}>
     <DialogTitle>Edit Data</DialogTitle>
