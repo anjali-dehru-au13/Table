@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -12,7 +12,7 @@ const TableData = () => {
  const [showModal, setShowModal] = useState(false);
 
  const [selectedRow, setSelectedRow] = useState({});
-
+ const [deleteModal, setDeleteModal] = useState(false);
  useEffect(() => {
   fetch("https://assets.alippo.com/catalog/static/data.json")
    .then((response) => {
@@ -50,6 +50,7 @@ const TableData = () => {
    return true;
   });
   setSavedData(newRows);
+  setDeleteModal(false);
  };
 
  const handleSubmit = (e) => {
@@ -95,7 +96,9 @@ const TableData = () => {
       style={{ marginLeft: 16, backgroundColor: "red", color: "#fff" }}
       tabIndex={params.hasFocus ? 0 : -1}
       onClick={() => {
-       handleDelete(params.row.id);
+       setDeleteModal(true);
+       setSelectedRow(params.row.id);
+       //  handleDelete(params.row.id);
       }}
      >
       Delete
@@ -187,6 +190,18 @@ const TableData = () => {
       <Button onClick={() => setShowModal(false)}>Cancel</Button>
      </DialogActions>
     </form>
+   </Dialog>
+   <Dialog
+    open={deleteModal}
+    onClose={() => {
+     setDeleteModal(false);
+    }}
+   >
+    <DialogTitle>Delete Data {selectedRow}</DialogTitle>
+    <DialogActions>
+     <Button onClick={() => handleDelete(selectedRow)}> Confirm</Button>
+     <Button onClick={() => setDeleteModal(false)}>Cancel</Button>
+    </DialogActions>
    </Dialog>
   </React.Fragment>
  );
