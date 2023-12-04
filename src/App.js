@@ -4,7 +4,7 @@ import TableData from "./components/TableData";
 function App() {
  return (
   <div>
-   <header className="App-header">
+   <header>
     {/* <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
@@ -17,8 +17,8 @@ function App() {
         >
           Learn React
         </a> */}
-    <TableData />
    </header>
+   <TableData />
   </div>
  );
 }
