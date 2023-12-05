@@ -5,8 +5,9 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-const Modal = (props) => {
- const { open, onClose } = props;
+import { Button } from "@mui/material";
+const EditModal = (props) => {
+ const { open, onClose, handleChange, selectedRow, handleSubmit } = props;
  return (
   <div>
    <Dialog open={open} onClose={onClose}>
@@ -66,7 +67,7 @@ const Modal = (props) => {
      </DialogContent>
      <DialogActions>
       <Button type="submit"> Submit</Button>
-      <Button onClick={() => setShowModal(false)}>Cancel</Button>
+      <Button onClick={onClose}>Cancel</Button>
      </DialogActions>
     </form>
    </Dialog>
@@ -74,4 +75,4 @@ const Modal = (props) => {
  );
 };
 
-export default Modal;
+export default EditModal;

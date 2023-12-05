@@ -7,6 +7,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import EditModal from "./Modal/EditModal";
+import DeleteModal from "./Modal/DeleteModal";
 const TableData = () => {
  const [savedData, setSavedData] = useState([]);
  const [showModal, setShowModal] = useState(false);
@@ -23,7 +25,6 @@ const TableData = () => {
        d["id"] = i + 1;
        return d;
       });
-      // console.log(data);
       setSavedData(newData);
      })
      .catch((error) => {
@@ -36,12 +37,12 @@ const TableData = () => {
  }, []);
 
  const handleChange = (key, change) => {
-  console.log(key, change);
   let newRow = { ...selectedRow };
   newRow[key] = change;
   setSelectedRow(newRow);
  };
 
+ //  deleteing a row
  const handleDelete = (rowID) => {
   let newRows = savedData.filter((data) => {
    if (data.id == rowID) {
@@ -53,6 +54,15 @@ const TableData = () => {
   setDeleteModal(false);
  };
 
+ const handleCloseModal = () => {
+  setShowModal(false);
+ };
+
+ const handleCloseDeleteModal = () => {
+  setDeleteModal(false);
+ };
+
+ //  submit Edit changes
  const handleSubmit = (e) => {
   e.preventDefault();
   let newRows = savedData.map((data) => {
@@ -62,8 +72,10 @@ const TableData = () => {
    return data;
   });
   setSavedData(newRows);
-  setShowModal(false);
+  handleCloseModal();
  };
+
+ //  columns
  const columns = [
   { field: "id", headerName: "SLNO", width: 100 },
 
@@ -130,79 +142,23 @@ const TableData = () => {
      "Data fetch failed"
     )}
    </div>
-   <Dialog open={showModal} onClose={() => setShowModal(false)}>
-    <DialogTitle>Edit Data</DialogTitle>
-    <form onSubmit={handleSubmit}>
-     <DialogContent>
-      {/* <DialogContentText>Edit the details below</DialogContentText> */}
 
-      <TextField
-       autoFocus
-       margin="dense"
-       id="name"
-       label="Name"
-       value={selectedRow.name}
-       onChange={(e) => handleChange("name", e.target.value)}
-       type="text"
-       fullWidth
-       required
-       variant="filled"
-      />
-      <TextField
-       autoFocus
-       margin="dense"
-       id="age"
-       label="Age"
-       value={selectedRow.age}
-       onChange={(e) => handleChange("age", e.target.value)}
-       type="number"
-       fullWidth
-       required
-       variant="filled"
-      />
-      <TextField
-       autoFocus
-       margin="dense"
-       id="city"
-       label="City"
-       required
-       value={selectedRow.city}
-       onChange={(e) => handleChange("city", e.target.value)}
-       type="text"
-       fullWidth
-       variant="filled"
-      />
-      <TextField
-       autoFocus
-       margin="dense"
-       id="pinCode"
-       label="Pincode"
-       value={selectedRow.pinCode}
-       onChange={(e) => handleChange("pinCode", e.target.value)}
-       type="number"
-       fullWidth
-       required
-       variant="filled"
-      />
-     </DialogContent>
-     <DialogActions>
-      <Button type="submit"> Submit</Button>
-      <Button onClick={() => setShowModal(false)}>Cancel</Button>
-     </DialogActions>
-    </form>
-   </Dialog>
-   <Dialog
+   {/* EDIT MODAL  */}
+   <EditModal
+    open={showModal}
+    onClose={handleCloseModal}
+    selectedRow={selectedRow}
+    handleChange={handleChange}
+    handleSubmit={handleSubmit}
+   />
+
+   {/* DELETE MODAL */}
+   <DeleteModal
     open={deleteModal}
-    onClose={() => {
-     setDeleteModal(false);
-    }}
-   >
-    <DialogTitle>Delete Data {selectedRow}</DialogTitle>
-    <DialogActions>
-     <Button onClick={() => handleDelete(selectedRow)}> Confirm</Button>
-     <Button onClick={() => setDeleteModal(false)}>Cancel</Button>
-    </DialogActions>
-   </Dialog>
+    selectedRow={selectedRow}
+    handleClose={handleCloseDeleteModal}
+    handleDelete={handleDelete}
+   />
   </React.Fragment>
  );
 };
